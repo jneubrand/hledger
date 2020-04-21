@@ -177,6 +177,7 @@ instance Semigroup Journal where
     ,jparsedefaultcommodity     = jparsedefaultcommodity     j2
     ,jparseparentaccounts       = jparseparentaccounts       j2
     ,jparsealiases              = jparsealiases              j2
+    ,jparsedefaultaccount       = jparsedefaultaccount       j2
     -- ,jparsetransactioncount     = jparsetransactioncount     j1 +  jparsetransactioncount     j2
     ,jparsetimeclockentries     = jparsetimeclockentries j1 <> jparsetimeclockentries j2
     ,jincludefilestack          = jincludefilestack          j2
@@ -202,6 +203,7 @@ nulljournal = Journal {
   ,jparsedefaultcommodity     = Nothing
   ,jparseparentaccounts       = []
   ,jparsealiases              = []
+  ,jparsedefaultaccount       = Nothing
   -- ,jparsetransactioncount     = 0
   ,jparsetimeclockentries     = []
   ,jincludefilestack          = []
