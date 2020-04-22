@@ -978,6 +978,39 @@ tests_JournalReader = tests "JournalReader" [
         (length . tpostings)
         2
 
+    ,test "unbalanced simple transaction within bucketed context" $ do
+      ep <- parseWithState nulljournal{jparsedefaultaccount=Just "b"} transactionp
+        (T.unlines
+          ["2009/1/1 x"
+          ," a  -1"
+          ])
+      assertRight ep
+      let (Right x) = ep
+      length (tpostings x) @?= 2
+      (tpostings x !! 1) @?= nullposting{paccount="b", pamount=missingmixedamt}
+
+    ,test "multi-leg transaction within bucketed context" $ do
+      ep <- parseWithState nulljournal{jparsedefaultaccount=Just "b"} transactionp
+        (T.unlines
+          ["2009/1/1 x"
+          ," a  -2"
+          ," c  1"
+          ])
+      assertRight ep
+      let (Right x) = ep
+      length (tpostings x) @?= 3
+      (tpostings x !! 2) @?= nullposting{paccount="b", pamount=missingmixedamt}
+
+    ,test "self-balancing transaction within bucketed context" $ do
+      ep <- parseWithState nulljournal{jparsedefaultaccount=Just "b"} transactionp
+        (T.unlines
+          ["2009/1/1 x"
+          ," a  -2"
+          ," c"
+          ])
+      assertRight ep
+      let (Right x) = ep
+      length (tpostings x) @?= 2
     ]
 
   -- directives
@@ -1039,6 +1072,12 @@ tests_JournalReader = tests "JournalReader" [
 
   ,tests "journalp" [
     test "empty file" $ assertParseEqE journalp "" nulljournal
+    ]
+
+  ,tests "bucketdirectivep" [
+    test "affects state"   $ assertParseStateOn bucketdirectivep "bucket a:b"
+        jparsedefaultaccount
+        (Just "a:b")
     ]
 
    -- these are defined here rather than in Common so they can use journalp
