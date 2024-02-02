@@ -44,6 +44,8 @@ module Hledger.Read.Common (
   journalAddAutoPostings,
   setYear,
   getYear,
+  setDefaultAccount,
+  getDefaultAccount,
   setDefaultCommodityAndStyle,
   getDefaultCommodityAndStyle,
   getDefaultAmountStyle,
@@ -492,6 +494,12 @@ popParentAccount = do
 
 getParentAccount :: JournalParser m AccountName
 getParentAccount = fmap (concatAccountNames . reverse . jparseparentaccounts) get
+
+setDefaultAccount :: MonadState Journal m => Maybe AccountName -> m ()
+setDefaultAccount a = modify' (\j -> j{jparsedefaultaccount=a})
+
+getDefaultAccount :: JournalParser m (Maybe AccountName)
+getDefaultAccount = jparsedefaultaccount `fmap` get
 
 addAccountAlias :: MonadState Journal m => AccountAlias -> m ()
 addAccountAlias a = modify' (\(j@Journal{..}) -> j{jparsealiases=a:jparsealiases})
