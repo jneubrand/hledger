@@ -798,7 +798,7 @@ multiBalanceReportAsTable opts@ReportOpts{summary_only_, average_, balanceaccum_
      (Group multiColumnTableInterColumnBorder $ map Header colheadings)
      (concat rows)
   where
-    colheadings = ["Commodity" | layout_ opts == LayoutBare]
+    colheadings = ["" | layout_ opts == LayoutBare]
                   ++ (if not summary_only_ then map (reportPeriodName balanceaccum_ spans) spans else [])
                   ++ ["  Total" | multiBalanceHasTotalsColumn opts]
                   ++ ["Average" | average_]
@@ -950,7 +950,7 @@ budgetReportAsTable ropts@ReportOpts{..} (PeriodicReport spans items totrow) =
         in
           (flip (concatTables SingleLine) $ Table rowhdrs colhdrs totalrows)  -- XXX ?
 
-    colheadings = ["Commodity" | layout_ == LayoutBare]
+    colheadings = ["" | layout_ == LayoutBare]
                   ++ map (reportPeriodName balanceaccum_ spans) spans
                   ++ ["  Total" | row_total_]
                   ++ ["Average" | average_]
@@ -1151,7 +1151,7 @@ budgetReportAsSpreadsheet
   -- heading row
   (addHeaderBorders $ map headerCell $
   "Account" :
-  ["Commodity" | layout_ == LayoutBare ]
+  ["" | layout_ == LayoutBare ]
    ++ concatMap (\spn -> [showDateSpan spn, "budget"]) colspans
    ++ concat [["Total"  ,"budget"] | row_total_]
    ++ concat [["Average","budget"] | average_]

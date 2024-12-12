@@ -353,7 +353,7 @@ compoundBalanceReportAsSpreadsheet fmt accountLabel maybeBlank ropts cbr =
       Spr.headerCell accountLabel :
       case layout_ ropts of
           LayoutTidy -> map Spr.headerCell tidyColumnLabels
-          LayoutBare -> [Spr.headerCell "Commodity"]
+          LayoutBare -> [Spr.headerCell ""]
           _ -> []
     dataHeaders =
       (guard (layout_ ropts /= LayoutTidy) >>) $
