@@ -152,7 +152,7 @@ postingsReportItemAsRecord opts@CliOpts{reportspec_=rspec} fmt baseUrl query (_,
   where
     cell = Spr.defaultCell
     idx  = Spr.integerCell . maybe 0 tindex $ ptransaction p
-    date = postingDate p -- XXX csv should show date2 with --date2
+    date = postingDateOrDate2 (whichDate $ _rsReportOpts rspec) p
     code = maybe "" tcode $ ptransaction p
     desc = maybe "" tdescription $ ptransaction p
     acct = bracket . dropAcct . clipAcct $ paccount p
